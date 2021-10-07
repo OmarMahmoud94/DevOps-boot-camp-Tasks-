@@ -1,5 +1,5 @@
 FROM node:12
-COPY nodeapp /nodeapp
+COPY Jenkins_tasks/Task_day_2/jenkins_nodejs_example-master/nodeapp /nodeapp
 WORKDIR /nodeapp
 RUN npm install
 CMD ["node", "/nodeapp/app.js"]
