@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('build') {
+            steps {
+               
+                sh 'docker build . -f Jenkins_tasks/Task_day_2/jenkins_nodejs_example-master/dockerfile -t omarquraah/nodejs_app_image:v1'
+  
+            }
+        }
+        stage('push') {
+            steps {
+                
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'pass', usernameVariable: 'username')]) {
+                    sh "docker login -u ${username} -p ${pass}"
+                    sh "docker push omarquraah/nodejs_app_image:v1"
+                }
+               
+            }
+        }
+        stage('deployment') {
+            steps {
+                
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'pass', usernameVariable: 'username')]) {
+                    sh "docker run -d -p 3000:3000 omarquraah/nodejs_app_image:v1"
+                }
+               
+            }
+        }
+    }
+}
