@@ -13,8 +13,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: docker login
-      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      run: docker login -u ${{ secrets.DOCKERHUBUSER }} -p ${{ secrets.DOCKERHUBPASS }}
     - name: Build the Docker image
-      run: docker build . -f dockerfile --tag mahmom/jenkins_sprints:${{ github.sha }}
+      run: docker build . -f dockerfile --tag omarquraah/jenkins_sprints:v3
     - name: push the Docker image
-      run: docker push mahmom/jenkins_sprints:${{ github.sha }}     
+      run: docker push omarquraah/jenkins_sprints:${{ github.sha }}     
