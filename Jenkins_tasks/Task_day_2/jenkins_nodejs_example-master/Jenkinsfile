@@ -3,30 +3,39 @@ pipeline {
 
     stages {
         stage('build') {
-            steps {
-               
-                sh 'docker build . -f Jenkins_tasks/Task_day_2/jenkins_nodejs_example-master/dockerfile -t omarquraah/nodejs_app_image:v1'
-  
+            steps {              
+                sh 'docker build . -f Jenkins_tasks/Task_day_2/jenkins_nodejs_example-master/dockerfile -t omarquraah/nodejs_app_image:v1' 
             }
+            post {
+                success {
+                    slackSend(color : "#66ffff" , message : "build is good")
+                }            
+            }                          
         }
         stage('push') {
-            steps {
-                
+            steps {              
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'pass', usernameVariable: 'username')]) {
                     sh "docker login -u ${username} -p ${pass}"
                     sh "docker push omarquraah/nodejs_app_image:v1"
-                }
-               
+                }                        
             }
+            post {
+                success {
+                    slackSend(color : "#66ffff" , message : "push is good")
+                }           
+            }   
         }
         stage('deployment') {
-            steps {
-                
+            steps {               
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'pass', usernameVariable: 'username')]) {
                     sh "docker run -d -p 3000:3000 omarquraah/nodejs_app_image:v1"
-                }
-               
+                }               
             }
+            post {
+                success {
+                    slackSend(color : "#66ffff" , message : "deployment is good")
+                }    
+            }      
         }
     }
 }
