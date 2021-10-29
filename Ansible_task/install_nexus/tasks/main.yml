@@ -1,0 +1,95 @@
+---
+# tasks file for install_nexus
+- name: Update repositories cache 
+  apt:
+    update_cache: yes
+
+- name: Install wget 
+  apt:
+    name: wget
+    state: present
+
+- name: Install openjdk 
+  apt:
+    name: openjdk-8-jre-headless
+    state: present
+
+- name: Download nexus
+  get_url:
+    url: https://download.sonatype.com/nexus/3/latest-unix.tar.gz
+    dest: /opt/nexus.tar.gz
+  notify: Unarchive_downloaded_file
+    
+
+- name: Find nexus-3*
+  find:
+    paths: /opt/
+    file_type: directory
+    patterns: 'nexus-3*'
+  register: result
+
+- name: print result
+  debug: 
+    var: result.files[0]['path']
+
+- name: rename dir
+  command: mv "{{ result.files[0]['path'] }}" /opt/nexus
+  when: result.matched == 1
+
+- name: Add the user nexus
+  user:
+    name: nexus 
+
+- name: Make sure user nexus is in the sudoers configuration
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    line: 'nexus   ALL=(ALL)       NOPASSWD: ALL'
+
+- name: Change dir /app/nexus owner
+  file:
+    path: /opt/nexus
+    owner: nexus
+    group: nexus
+    recurse: yes
+
+- name: Change dir /app/sonatype-work owner
+  file:
+    path: /opt/sonatype-work
+    owner: nexus
+    group: nexus
+    recurse: yes
+
+
+- name: Ensure run_as_user is set to nexus
+  lineinfile:
+    path: /opt/nexus/bin/nexus.rc
+    regexp: '^#run_as_user='
+    line: run_as_user="nexus"
+
+- name: Create a symbolic link to nexus
+  ansible.builtin.file:
+    src: /opt/nexus/bin/nexus
+    dest: /etc/init.d/nexus
+    # owner: nexus
+    # group: nexus
+    state: link
+
+- name: Copy nexus.service from local host 
+  copy:
+    src: ~/ansible_demo/task/install_nexus/files/nexus.service
+    dest: /etc/systemd/system/nexus.service
+    mode: a=rwx
+
+- name: Just force systemd to reread configs 
+  systemd:
+    daemon_reload: yes
+
+- name: Start service nexus
+  service:
+    name: nexus
+    state: started
+
+   
+
+

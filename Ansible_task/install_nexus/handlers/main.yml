@@ -1,0 +1,8 @@
+---
+# handlers file for install_nexus
+
+- name: Unarchive_downloaded_file
+  unarchive:
+    src: /opt/nexus.tar.gz
+    dest: /opt/
+    remote_src: yes
