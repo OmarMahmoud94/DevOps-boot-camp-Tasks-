@@ -4,3 +4,6 @@
 [submodule "Terraform_task/Terraform_task/terraform"]
 	path = Terraform_task/Terraform_task/terraform
 	url = https://github.com/OmarMahmoud94/terraform_bootcamp.git
+[submodule "Terraform_task/Terraform"]
+	path = Terraform_task/Terraform
+	url = https://github.com/OmarMahmoud94/terraform_bootcamp.git
