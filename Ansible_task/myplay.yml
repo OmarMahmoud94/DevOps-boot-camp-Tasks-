@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  connection: local
+  remote_user: omar 
+  become: yes
+  roles: 
+    - install_nexus
+
+    
