@@ -1,0 +1,12 @@
+[submodule "Terraform_task/Terraform_task/app/nodejs_app_rds_redis"]
+	path = Terraform_task/Terraform_task/app/nodejs_app_rds_redis
+	url = https://github.com/OmarMahmoud94/Nodejs_app.git
+[submodule "Terraform_task/Terraform_task/terraform"]
+	path = Terraform_task/Terraform_task/terraform
+	url = https://github.com/OmarMahmoud94/terraform_bootcamp.git
+[submodule "Terraform_task/Terraform"]
+	path = Terraform_task/Terraform
+	url = https://github.com/OmarMahmoud94/terraform_bootcamp.git
+[submodule "Terraform_task/app/nodejs_app_rds_redis"]
+	path = Terraform_task/app/nodejs_app_rds_redis
+	url = https://github.com/OmarMahmoud94/Nodejs_app.git
